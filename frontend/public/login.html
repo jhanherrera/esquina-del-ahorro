@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Esquina del Ahorro</title>
+  <link rel="stylesheet" href="./src/styles/login.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🏪 Esquina del Ahorro</h1>
+      <p>Sistema de Gestión</p>
+    </div>
+
+    <form id="loginForm">
+      <input 
+        id="usuario" 
+        type="text" 
+        placeholder="Usuario" 
+        required
+        autocomplete="username"
+      >
+      <input 
+        id="password" 
+        type="password" 
+        placeholder="Contraseña" 
+        required
+        autocomplete="current-password"
+      >
+      <button type="submit">Iniciar Sesión</button>
+    </form>
+
+    <div id="mensaje" class="mensaje"></div>
+
+    <div class="info">
+      <p><small>Usuario demo: <strong>admin</strong> | Contraseña: <strong>admin123</strong></small></p>
+    </div>
+  </div>
+
+  <script type="module" src="./src/pages/login.js"></script>
+</body>
+</html>
