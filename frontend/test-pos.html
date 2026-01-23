@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test POS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f6fa;
+    }
+    .test-card {
+      background: white;
+      padding: 20px;
+      margin: 10px 0;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .success { color: green; }
+    .error { color: red; }
+    pre {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 5px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧪 Test POS - Diagnóstico</h1>
+  
+  <div class="test-card">
+    <h2>1. Test Backend</h2>
+    <button onclick="testBackend()">Probar Backend</button>
+    <div id="backendResult"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>2. Test Productos API</h2>
+    <button onclick="testProductos()">Obtener Productos</button>
+    <div id="productosResult"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>3. Test Módulo POS</h2>
+    <button onclick="testPOSModule()">Probar Módulo POS</button>
+    <div id="posResult"></div>
+  </div>
+
+  <div class="test-card">
+    <h2>4. Test Estilos</h2>
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px;">
+      Si ves este cuadro con gradiente morado, los estilos funcionan
+    </div>
+  </div>
+
+  <script type="module">
+    // Test 1: Backend
+    window.testBackend = async () => {
+      const result = document.getElementById('backendResult');
+      result.innerHTML = '<p>⏳ Probando...</p>';
+      
+      try {
+        const response = await fetch('http://localhost:3000/health');
+        const data = await response.json();
+        result.innerHTML = `<p class="success">✅ Backend OK</p><pre>${JSON.stringify(data, null, 2)}</pre>`;
+      } catch (error) {
+        result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+      }
+    };
+
+    // Test 2: Productos
+    window.testProductos = async () => {
+      const result = document.getElementById('productosResult');
+      result.innerHTML = '<p>⏳ Obteniendo productos...</p>';
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/productos');
+        const data = await response.json();
+        result.innerHTML = `<p class="success">✅ ${data.length} productos encontrados</p><pre>${JSON.stringify(data.slice(0, 3), null, 2)}</pre>`;
+      } catch (error) {
+        result.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
+      }
+    };
+
+    // Test 3: Módulo POS
+    window.testPOSModule = async () => {
+      const result = document.getElementById('posResult');
+      result.innerHTML = '<p>⏳ Probando módulo POS...</p>';
+      
+      try {
+        const { inicializarPOS } = await import('./src/components/pos.js');
+        result.innerHTML = '<p class="success">✅ Módulo POS importado correctamente</p>';
+        
+        // Verificar funciones
+        result.innerHTML += '<p>Funciones disponibles:</p>';
+        result.innerHTML += `<ul>
+          <li>inicializarPOS: ${typeof inicializarPOS}</li>
+        </ul>`;
+      } catch (error) {
+        result.innerHTML = `<p class="error">❌ Error al importar: ${error.message}</p><pre>${error.stack}</pre>`;
+      }
+    };
+
+    // Auto-ejecutar tests al cargar
+    console.log('🧪 Página de diagnóstico cargada');
+    console.log('Click en los botones para ejecutar los tests');
+  </script>
+</body>
+</html>

@@ -97,3 +97,23 @@ export const obtenerVentas = async (filtros = {}) => {
     return [];
   }
 };
+
+// Obtener clientes
+export const obtenerClientes = async () => {
+  try {
+    return await api.get('/catalogos/clientes');
+  } catch (error) {
+    console.error('Error al obtener clientes:', error);
+    return [];
+  }
+};
+
+// Crear cliente
+export const crearCliente = async (cliente) => {
+  try {
+    return await api.post('/catalogos/clientes', cliente);
+  } catch (error) {
+    console.error('Error al crear cliente:', error);
+    return { success: false, message: 'Error al crear cliente' };
+  }
+};

@@ -11,6 +11,7 @@ import {
   obtenerCategorias,
   obtenerProveedores
 } from '../utils/api.js';
+import { inicializarPOS } from '../components/pos.js';
 
 // Verificar autenticación
 const usuario = verificarAutenticacion();
@@ -49,6 +50,11 @@ function inicializarMenu() {
       // Mostrar sección correspondiente
       sections.forEach(s => s.classList.remove('active'));
       document.getElementById(targetSection).classList.add('active');
+      
+      // Inicializar POS si se selecciona esa sección
+      if (targetSection === 'pos') {
+        inicializarPOS();
+      }
     });
   });
 }

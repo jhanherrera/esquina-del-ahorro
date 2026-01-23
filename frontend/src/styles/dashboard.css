@@ -424,3 +424,359 @@ tbody tr.stock-bajo {
     width: 100%;
   }
 }
+
+/* ==========================================
+   ESTILOS PUNTO DE VENTA (POS)
+   ========================================== */
+
+.pos-container {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  height: calc(100vh - 120px);
+}
+
+.pos-productos {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.pos-header {
+  margin-bottom: 20px;
+}
+
+.pos-header h2 {
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  overflow-y: auto;
+  flex: 1;
+  padding: 5px;
+}
+
+.producto-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 120px;
+}
+
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.producto-card:active {
+  transform: scale(0.95);
+}
+
+.producto-info h4 {
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.producto-codigo {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-bottom: 5px;
+}
+
+.producto-stock {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.producto-precio {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.producto-precio .precio {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.no-productos {
+  text-align: center;
+  color: #999;
+  padding: 40px;
+  grid-column: 1 / -1;
+}
+
+/* Panel Carrito */
+.pos-carrito {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.cliente-section {
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.cliente-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.cliente-row {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-add-cliente {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.btn-add-cliente:hover {
+  background: #229954;
+}
+
+/* Tabla del Carrito */
+.carrito-table {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 300px;
+}
+
+.carrito-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.carrito-table th {
+  background: #f8f9fa;
+  padding: 10px 5px;
+  text-align: left;
+  font-size: 13px;
+  color: #555;
+  position: sticky;
+  top: 0;
+}
+
+.carrito-table td {
+  padding: 10px 5px;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+}
+
+.empty-cart {
+  text-align: center;
+  color: #999;
+  padding: 40px 10px !important;
+  font-style: italic;
+}
+
+.cantidad-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.btn-cantidad {
+  background: #667eea;
+  color: white;
+  border: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-cantidad:hover {
+  background: #5568d3;
+}
+
+.cantidad {
+  min-width: 30px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.btn-eliminar {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.btn-eliminar:hover {
+  background: #c0392b;
+}
+
+/* Totales */
+.totales-section {
+  padding: 15px 0;
+  border-top: 2px solid #eee;
+  border-bottom: 2px solid #eee;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.total-final {
+  font-size: 20px;
+  font-weight: bold;
+  color: #27ae60;
+  padding-top: 12px;
+  border-top: 2px solid #27ae60;
+  margin-top: 8px;
+}
+
+/* Sección de Pago */
+.pago-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pago-section label {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 13px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+/* Botones de Acción */
+.botones-accion {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.btn-cancelar {
+  background: #95a5a6;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-cancelar:hover {
+  background: #7f8c8d;
+  transform: translateY(-2px);
+}
+
+.btn-procesar {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-procesar:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
+}
+
+.btn-procesar:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Responsive POS */
+@media (max-width: 1024px) {
+  .pos-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .productos-grid {
+    max-height: 400px;
+  }
+
+  .carrito-table {
+    max-height: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .productos-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .botones-accion {
+    grid-template-columns: 1fr;
+  }
+}

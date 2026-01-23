@@ -22,6 +22,7 @@
   <aside class="sidebar">
     <ul class="menu">
       <li><a href="#" data-section="dashboard" class="active">📊 Dashboard</a></li>
+      <li><a href="#" data-section="pos">🛒 Punto de Venta</a></li>
       <li><a href="#" data-section="productos">📦 Productos</a></li>
       <li><a href="#" data-section="ventas">💰 Ventas</a></li>
       <li><a href="#" data-section="inventario">📋 Inventario</a></li>
@@ -51,6 +52,107 @@
         <div class="stat-card">
           <h3>Productos Activos</h3>
           <p class="stat-value" id="productosActivos">0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sección Punto de Venta (POS) -->
+    <section id="pos" class="section">
+      <div class="pos-container">
+        <!-- Panel izquierdo: Productos -->
+        <div class="pos-productos">
+          <div class="pos-header">
+            <h2>🛒 Punto de Venta</h2>
+            <input 
+              type="text" 
+              id="buscarProducto" 
+              placeholder="🔍 Buscar producto (F2)..."
+              class="search-input"
+            >
+          </div>
+          
+          <div id="productosGrid" class="productos-grid">
+            <!-- Productos se cargan dinámicamente -->
+          </div>
+        </div>
+
+        <!-- Panel derecho: Carrito y Total -->
+        <div class="pos-carrito">
+          <div class="cliente-section">
+            <label>Cliente:</label>
+            <div class="cliente-row">
+              <input 
+                type="text" 
+                id="clienteInput" 
+                list="clientesList" 
+                class="form-control" 
+                placeholder="Buscar o seleccionar cliente..."
+                autocomplete="off"
+              >
+              <datalist id="clientesList">
+                <option value="">Cliente General</option>
+              </datalist>
+              <button onclick="mostrarModalCliente()" class="btn-add-cliente" title="Agregar cliente">
+                ➕
+              </button>
+            </div>
+          </div>
+
+          <div class="carrito-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Precio</th>
+                  <th>Cant.</th>
+                  <th>Subtotal</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="carritoBody">
+                <tr>
+                  <td colspan="5" class="empty-cart">🛒 Carrito vacío</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="totales-section">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span id="subtotal">S/ 0.00</span>
+            </div>
+            <div class="total-row">
+              <span>IGV (18%):</span>
+              <span id="impuesto">S/ 0.00</span>
+            </div>
+            <div class="total-row total-final">
+              <span>TOTAL:</span>
+              <span id="total">S/ 0.00</span>
+            </div>
+          </div>
+
+          <div class="pago-section">
+            <label>Método de Pago:</label>
+            <select id="metodoPago" class="form-control">
+              <option value="efectivo">💵 Efectivo</option>
+              <option value="tarjeta">💳 Tarjeta</option>
+              <option value="transferencia">📱 Transferencia</option>
+              <option value="credito">📋 Crédito</option>
+            </select>
+
+            <label>Notas:</label>
+            <textarea id="notasVenta" class="form-control" rows="2" placeholder="Observaciones..."></textarea>
+          </div>
+
+          <div class="botones-accion">
+            <button onclick="cancelarVenta()" class="btn-cancelar">
+              ❌ Cancelar
+            </button>
+            <button onclick="procesarVenta()" id="btnProcesarVenta" class="btn-procesar" disabled>
+              ✅ Procesar Venta
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -193,6 +295,6 @@
     </section>
   </main>
 
-  <script type="module" src="./src/pages/dashboard.js"></script>
+  <script type="module" src="../src/pages/dashboard.js"></script>
 </body>
 </html>
