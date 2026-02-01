@@ -1,0 +1,270 @@
+<!-- Header -->
+<header class="header">
+    <div class="header-content">
+        <div class="header-left">
+            <h1>📦 Gestión de Inventario</h1>
+            <p class="header-subtitle">Control y seguimiento de stock</p>
+        </div>
+        <div class="header-right">
+            <button class="btn btn-secondary" onclick="verReporte()">
+                📊 Ver Reporte
+            </button>
+            <button class="btn btn-primary" onclick="abrirModalMovimiento()">
+                ➕ Registrar Movimiento
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Main Container -->
+<main class="main-container">
+    
+    <!-- Estadísticas -->
+    <section class="stats-section">
+        <div class="stat-card stat-card-primary">
+            <div class="stat-icon">📦</div>
+            <div class="stat-content">
+                <h3 id="invTotalProductos">0</h3>
+                <p>Total Productos</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-success">
+            <div class="stat-icon">📊</div>
+            <div class="stat-content">
+                <h3 id="invTotalUnidades">0</h3>
+                <p>Unidades en Stock</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-warning">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+                <h3 id="invStockBajo">0</h3>
+                <p>Stock Bajo</p>
+            </div>
+        </div>
+
+        <div class="stat-card stat-card-info">
+            <div class="stat-icon">💰</div>
+            <div class="stat-content">
+                <h3 id="invValorInventario">S/ 0.00</h3>
+                <p>Valor Total</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros y Búsqueda -->
+    <section class="filters-section">
+        <div class="search-box">
+            <input 
+                type="text" 
+                id="buscarProductoInventario" 
+                placeholder="🔍 Buscar por nombre o código..."
+                class="search-input"
+            >
+        </div>
+
+        <div class="filters-row">
+            <select id="filtroCategoria" class="filter-select">
+                <option value="">Todas las categorías</option>
+            </select>
+
+            <select id="filtroEstadoStock" class="filter-select">
+                <option value="">Todos los estados</option>
+                <option value="bajo">Stock Bajo</option>
+                <option value="medio">Stock Medio</option>
+                <option value="normal">Stock Normal</option>
+            </select>
+
+            <button class="btn btn-outline" onclick="limpiarFiltros()">
+                🔄 Limpiar Filtros
+            </button>
+        </div>
+    </section>
+
+    <!-- Alertas de Stock Bajo -->
+    <section class="alerts-section" id="alertasStockBajo" style="display: none;">
+        <div class="alert alert-warning">
+            <div class="alert-icon">⚠️</div>
+            <div class="alert-content">
+                <h4>Productos con Stock Bajo</h4>
+                <p id="alertaTexto">Hay productos que necesitan reabastecimiento.</p>
+                <button class="btn btn-sm" onclick="verStockBajo()">Ver Detalles</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabla de Inventario -->
+    <section class="table-section">
+        <div class="table-header">
+            <h2>Lista de Productos</h2>
+            <div class="table-actions">
+                <button class="btn btn-outline btn-sm" onclick="exportarInventario()">
+                    📥 Exportar
+                </button>
+                <button class="btn btn-outline btn-sm" onclick="imprimirInventario()">
+                    🖨️ Imprimir
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th>Código</th>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Stock</th>
+                        <th>Stock Mín.</th>
+                        <th>P. Compra</th>
+                        <th>P. Venta</th>
+                        <th>Valor Stock</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaInventario">
+                    <tr>
+                        <td colspan="10" class="text-center">
+                            <div class="loading">Cargando inventario...</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Historial de Movimientos -->
+    <section class="history-section">
+        <div class="history-header">
+            <h2>Movimientos Recientes</h2>
+            <button class="btn btn-outline btn-sm" onclick="verTodosMovimientos()">
+                Ver Todo el Historial
+            </button>
+        </div>
+
+        <div class="movements-container" id="movimientosRecientes">
+            <div class="loading">Cargando movimientos...</div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Modal: Registrar Movimiento -->
+<div id="modalMovimiento" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Registrar Movimiento de Inventario</h2>
+            <button class="modal-close" onclick="cerrarModalMovimiento()">×</button>
+        </div>
+
+        <form id="formMovimiento" class="modal-body">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="movProducto">Producto *</label>
+                    <select id="movProducto" required class="form-control">
+                        <option value="">Seleccionar producto...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="movTipo">Tipo de Movimiento *</label>
+                    <select id="movTipo" required class="form-control">
+                        <option value="entrada">➕ Entrada (Aumentar stock)</option>
+                        <option value="salida">➖ Salida (Reducir stock)</option>
+                        <option value="ajuste">🔧 Ajuste de inventario</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="movCantidad">Cantidad *</label>
+                    <input 
+                        type="number" 
+                        id="movCantidad" 
+                        required 
+                        min="1" 
+                        class="form-control"
+                        placeholder="Ingrese cantidad"
+                    >
+                    <small class="form-help">Stock actual: <span id="stockActual">0</span></small>
+                </div>
+
+                <div class="form-group">
+                    <label for="movMotivo">Motivo</label>
+                    <input 
+                        type="text" 
+                        id="movMotivo" 
+                        class="form-control"
+                        placeholder="Ej: Compra a proveedor, Inventario físico"
+                    >
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="cerrarModalMovimiento()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">
+                    ✅ Registrar Movimiento
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal: Ver Stock Bajo -->
+<div id="modalStockBajo" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h2>⚠️ Productos con Stock Bajo</h2>
+            <button class="modal-close" onclick="cerrarModalStockBajo()">×</button>
+        </div>
+
+        <div class="modal-body">
+            <div id="listaStockBajo" class="stock-bajo-list">
+                <div class="loading">Cargando...</div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="cerrarModalStockBajo()">
+                Cerrar
+            </button>
+            <button class="btn btn-primary" onclick="generarOrdenCompra()">
+                📝 Generar Orden de Compra
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Reporte -->
+<div id="modalReporte" class="modal">
+    <div class="modal-content modal-large">
+        <div class="modal-header">
+            <h2>📊 Reporte de Inventario</h2>
+            <button class="modal-close" onclick="cerrarModalReporte()">×</button>
+        </div>
+
+        <div class="modal-body">
+            <div id="contenidoReporte">
+                <div class="loading">Generando reporte...</div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-outline" onclick="cerrarModalReporte()">
+                Cerrar
+            </button>
+            <button class="btn btn-primary" onclick="descargarReporte()">
+                📥 Descargar PDF
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast de Notificaciones -->
+<div id="toast" class="toast"></div>
