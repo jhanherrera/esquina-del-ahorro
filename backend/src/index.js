@@ -8,6 +8,7 @@ import usuariosRoutes from "./routes/usuarios.js";
 import productosRoutes from "./routes/productos.js";
 import ventasRoutes from "./routes/ventas.js";
 import catalogosRoutes from "./routes/catalogos.js";
+import inventarioRoutes from "./routes/inventario.js"; 
 
 // Configurar variables de entorno
 dotenv.config();
@@ -33,6 +34,7 @@ app.use("/api/usuarios", usuariosRoutes);
 app.use("/api/productos", productosRoutes);
 app.use("/api/ventas", ventasRoutes);
 app.use("/api/catalogos", catalogosRoutes);
+app.use("/api/inventario", inventarioRoutes); 
 
 // Ruta raíz
 app.get("/", (req, res) => {
@@ -43,7 +45,8 @@ app.get("/", (req, res) => {
       usuarios: "/api/usuarios",
       productos: "/api/productos",
       ventas: "/api/ventas",
-      catalogos: "/api/catalogos"
+      catalogos: "/api/catalogos",
+      inventario: "/api/inventario"
     }
   });
 });
