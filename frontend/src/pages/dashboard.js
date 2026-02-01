@@ -55,6 +55,12 @@ function inicializarMenu() {
       if (targetSection === 'pos') {
         inicializarPOS();
       }
+
+      if (targetSection === 'inventario') {
+        console.log('Entrando a inventario');
+        cargarInventario();
+      }
+      
     });
   });
 }
@@ -263,6 +269,46 @@ function actualizarDashboard() {
   const stockBajo = productos.filter(p => p.stock <= p.stock_minimo).length;
   document.getElementById('stockBajo').textContent = stockBajo;
 }
+
+
+// Cargar contenido de inventario dinámicamente
+async function cargarInventario() {
+  const contenedor = document.getElementById('inventario');
+  console.log('Cargando módulo de inventario...');
+
+  try {
+    // Cargar el HTML parcial de inventario
+    const response = await fetch('/public/inventario.partial.html');
+    if (!response.ok) {
+      throw new Error('No se pudo cargar el módulo de inventario');
+    }
+    
+    const html = await response.text();
+    contenedor.innerHTML = html;
+    
+    console.log('Contenido HTML de inventario cargado');
+    
+    // Importar e inicializar el módulo de inventario
+    const { inicializarInventario } = await import('./inventario.js');
+    await inicializarInventario();
+    
+    console.log(' Módulo de inventario inicializado');
+    
+  } catch (error) {
+    console.error('❌ Error al cargar inventario:', error);
+    contenedor.innerHTML = `
+      <div style="padding: 40px; text-align: center;">
+        <h2 style="color: #e74c3c;">❌ Error al cargar el módulo de inventario</h2>
+        <p style="color: #7f8c8d; margin-top: 10px;">${error.message}</p>
+        <button onclick="cargarInventario()" style="margin-top: 20px; padding: 10px 20px; background: #667eea; color: white; border: none; border-radius: 8px; cursor: pointer;">
+          🔄 Reintentar
+        </button>
+      </div>
+    `;
+  }
+}
+
+
 
 // Cerrar sesión
 window.cerrarSesion = function() {

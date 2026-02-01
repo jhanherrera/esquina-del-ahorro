@@ -161,9 +161,10 @@ export const registrarMovimiento = (req, res) => {
     const producto = results[0];
     const stockActual = producto.stock;
 
+    
     // Calcular nuevo stock
     let nuevoStock;
-    if (tipo === 'entrada' || tipo === 'ajuste') {
+    if (tipo === 'entrada') {
       nuevoStock = stockActual + parseInt(cantidad);
     } else if (tipo === 'salida') {
       nuevoStock = stockActual - parseInt(cantidad);
@@ -175,6 +176,9 @@ export const registrarMovimiento = (req, res) => {
           message: `Stock insuficiente. Stock actual: ${stockActual}, intentando retirar: ${cantidad}`
         });
       }
+    } else if (tipo === 'ajuste') {
+      // Para ajuste, establecer directamente el valor ingresado
+      nuevoStock = parseInt(cantidad);
     }
 
     // Iniciar transacción
@@ -239,7 +243,7 @@ export const registrarMovimiento = (req, res) => {
                 producto: producto.nombre,
                 stock_anterior: stockActual,
                 stock_nuevo: nuevoStock,
-                diferencia: tipo === 'salida' ? -cantidad : cantidad
+                diferencia: tipo === 'salida' ? -cantidad : (tipo === 'ajuste' ? nuevoStock - stockActual : cantidad)
               }
             });
           });

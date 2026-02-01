@@ -117,3 +117,29 @@ export const crearCliente = async (cliente) => {
     return { success: false, message: 'Error al crear cliente' };
   }
 };
+
+// Inventario
+export const obtenerDashboardInventario = async () => {
+    try {
+        const [inventario, resumen] = await Promise.all([
+            api.get('/inventario'),
+            api.get('/inventario/valor-total')
+        ]);
+        return { 
+            productos: inventario.success ? inventario.data : [], 
+            resumen: resumen.success ? resumen.data : {} 
+        };
+    } catch (error) {
+        console.error('Error al obtener datos del inventario:', error);
+        return { productos: [], resumen: {} };
+    }
+};
+
+export const registrarMovimientoStock = async (datos) => {
+    try {
+        return await api.post('/inventario/movimiento', datos);
+    } catch (error) {
+        console.error('Error al registrar movimiento:', error);
+        return { success: false, message: 'Error de conexión' };
+    }
+};
