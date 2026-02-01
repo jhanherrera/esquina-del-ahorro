@@ -615,6 +615,13 @@ body {
     border-top: 1px solid var(--border-color);
 }
 
+/* Botones dentro del modal-footer más pequeños */
+.modal-footer .btn {
+    padding: 0.5rem 1rem  !important;
+    font-size: 0.875rem  !important;
+    min-width: auto;
+}
+
 /* =====================================================
    FORMULARIOS
    ===================================================== */

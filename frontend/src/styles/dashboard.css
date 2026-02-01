@@ -829,3 +829,16 @@ tbody tr.stock-bajo {
   margin: 0 !important;
   z-index: 9999 !important;
 }
+
+/* Corregir el tamaño de los botones en modal-footer */
+#inventario .modal-footer .btn,
+#inventario .modal-footer .btn-primary,
+#inventario .modal-footer .btn-outline,
+#inventario .modal-footer button.btn {
+  flex: none !important;        /* ← Esto anula el flex: 1 */
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+  width: auto !important;
+  min-width: 100px !important;
+  max-width: 200px !important;
+}
