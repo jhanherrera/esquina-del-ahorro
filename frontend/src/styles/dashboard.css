@@ -780,3 +780,52 @@ tbody tr.stock-bajo {
     grid-template-columns: 1fr;
   }
 }
+
+/*
+   ESTILOS PARA MÓDULO DE INVENTARIO
+   ========================================== */
+
+/* Ajustar el header del inventario para que no tenga posición fixed */
+#inventario .header {
+  position: relative;
+  top: auto;
+  left: auto;
+  right: auto;
+  z-index: auto;
+  margin: -30px -30px 20px -30px;
+}
+
+/* Ajustar el contenedor principal del inventario */
+#inventario .main-container {
+  padding: 0;
+  margin-top: 0;
+}
+
+/* Los modales del inventario deben estar en posición fixed global */
+#inventario .modal {
+  position: fixed;
+  margin-left: -250px; /* Compensar el margen del sidebar */
+}
+
+/* Asegurar que los estilos de inventario no sobrescriban los del dashboard */
+#inventario {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* ========================================== 
+   FIX PARA MODALES DE INVENTARIO 
+   ========================================== */
+
+/* Forzar que los modales del inventario cubran TODA la pantalla */
+#inventario .modal {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+}
