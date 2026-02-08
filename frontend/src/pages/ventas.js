@@ -380,5 +380,6 @@ function mostrarToast(msg) {
 ================================ */
 
 function volverDashboard() {
+  console.log("Intentando volver al dashboard...");
   window.location.href = "dashboard.html";
 }
