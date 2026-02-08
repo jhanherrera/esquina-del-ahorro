@@ -14,7 +14,7 @@ import inventarioRoutes from "./routes/inventario.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const BASE_PORT = Number(process.env.PORT || 3000);
 
 // Middlewares
 app.use(cors({
@@ -77,15 +77,35 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-  console.log(`
+// Iniciar servidor con fallback de puerto si está ocupado
+const iniciarServidor = (port, intentosRestantes = 10) => {
+  const server = app.listen(port);
+
+  server.on("listening", () => {
+    console.log(`
 ╔════════════════════════════════════════╗
 ║  🏪 Esquina del Ahorro - Backend      ║
-║  🚀 Servidor corriendo en puerto ${PORT}  ║
-║  📡 http://localhost:${PORT}             ║
+║  🚀 Servidor corriendo en puerto ${port}  ║
+║  📡 http://localhost:${port}             ║
 ╚════════════════════════════════════════╝
-  `);
-});
+    `);
+  });
+
+  server.on("error", (error) => {
+    if (error.code === "EADDRINUSE" && intentosRestantes > 0) {
+      const siguientePuerto = port + 1;
+      console.warn(
+        `⚠️  Puerto ${port} en uso. Reintentando en ${siguientePuerto}...`
+      );
+      iniciarServidor(siguientePuerto, intentosRestantes - 1);
+      return;
+    }
+
+    console.error("❌ No se pudo iniciar el servidor:", error);
+    process.exit(1);
+  });
+};
+
+iniciarServidor(BASE_PORT);
 
 export default app;

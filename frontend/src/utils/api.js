@@ -78,25 +78,25 @@ export const obtenerProveedores = async () => {
 };
 
 // Crear venta
-export const crearVenta = async (venta) => {
-  try {
-    return await api.post('/ventas', venta);
-  } catch (error) {
-    console.error('Error al crear venta:', error);
-    return { success: false, message: 'Error al procesar venta' };
-  }
-};
+// export const crearVenta = async (venta) => {
+//   try {
+//     return await api.post('/ventas', venta);
+//   } catch (error) {
+//     console.error('Error al crear venta:', error);
+//     return { success: false, message: 'Error al procesar venta' };
+//   }
+// };
 
 // Obtener ventas
-export const obtenerVentas = async (filtros = {}) => {
-  try {
-    const params = new URLSearchParams(filtros).toString();
-    return await api.get(`/ventas${params ? '?' + params : ''}`);
-  } catch (error) {
-    console.error('Error al obtener ventas:', error);
-    return [];
-  }
-};
+// export const obtenerVentas = async (filtros = {}) => {
+//   try {
+//     const params = new URLSearchParams(filtros).toString();
+//     return await api.get(`/ventas${params ? '?' + params : ''}`);
+//   } catch (error) {
+//     console.error('Error al obtener ventas:', error);
+//     return [];
+//   }
+// };
 
 // Obtener clientes
 export const obtenerClientes = async () => {
@@ -142,4 +142,113 @@ export const registrarMovimientoStock = async (datos) => {
         console.error('Error al registrar movimiento:', error);
         return { success: false, message: 'Error de conexión' };
     }
+};
+
+
+//ventas
+
+export const crearVenta = async (venta) => {
+  try {
+    const response = await api.post('/ventas', venta);
+    return response;
+  } catch (error) {
+    console.error('Error al crear venta:', error);
+    return { success: false, message: 'Error al procesar venta' };
+  }
+};
+
+export const obtenerVentas = async (filtros = {}) => {
+  try {
+    const params = new URLSearchParams();
+    
+    if (filtros.fecha_inicio) params.append('fecha_inicio', filtros.fecha_inicio);
+    if (filtros.fecha_fin) params.append('fecha_fin', filtros.fecha_fin);
+    if (filtros.estado) params.append('estado', filtros.estado);
+    if (filtros.cliente_id) params.append('cliente_id', filtros.cliente_id);
+    
+    const queryString = params.toString();
+    const url = `/ventas${queryString ? '?' + queryString : ''}`;
+    
+    return await api.get(url);
+  } catch (error) {
+    console.error('Error al obtener ventas:', error);
+    return [];
+  }
+};
+
+
+export const obtenerDetalleVenta = async (ventaId) => {
+  try {
+    return await api.get(`/ventas/${ventaId}`);
+  } catch (error) {
+    console.error('Error al obtener detalle de venta:', error);
+    return [];
+  }
+};
+
+export const anularVenta = async (ventaId) => {
+  try {
+    return await api.put(`/ventas/${ventaId}/anular`);
+  } catch (error) {
+    console.error('Error al anular venta:', error);
+    return { success: false, message: 'Error al anular venta' };
+  }
+};
+
+export const obtenerReporteVentas = async (fechaInicio, fechaFin) => {
+  try {
+    const params = new URLSearchParams({
+      fecha_inicio: fechaInicio,
+      fecha_fin: fechaFin
+    });
+    
+    return await api.get(`/ventas/reporte?${params.toString()}`);
+  } catch (error) {
+    console.error('Error al obtener reporte:', error);
+    return [];
+  }
+};
+
+
+export const obtenerProductosMasVendidos = async () => {
+  try {
+    return await api.get('/ventas/productos-mas-vendidos');
+  } catch (error) {
+    console.error('Error al obtener productos más vendidos:', error);
+    return [];
+  }
+};
+
+
+export const obtenerEstadisticasDashboard = async () => {
+  try {
+    const hoy = new Date().toISOString().split('T')[0];
+    
+    const [productos, ventas] = await Promise.all([
+      obtenerProductos(),
+      obtenerVentas({ fecha_inicio: hoy, fecha_fin: hoy })
+    ]);
+    
+    const totalProductos = productos.length;
+    const productosActivos = productos.filter(p => p.activo).length;
+    const stockBajo = productos.filter(p => p.stock <= p.stock_minimo).length;
+    
+    const ventasHoy = ventas.filter(v => v.estado === 'completada');
+    const totalVentasHoy = ventasHoy.reduce((sum, v) => sum + parseFloat(v.total || 0), 0);
+    
+    return {
+      totalProductos,
+      productosActivos,
+      stockBajo,
+      ventasHoy: totalVentasHoy
+    };
+  } catch (error) {
+    console.error('Error al obtener estadísticas:', error);
+    return {
+      totalProductos: 0,
+      productosActivos: 0,
+      stockBajo: 0,
+      ventasHoy: 0
+    };
+  }
 };

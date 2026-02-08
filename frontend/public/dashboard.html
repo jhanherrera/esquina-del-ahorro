@@ -1,41 +1,37 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Esquina del Ahorro</title>
-  <link rel="stylesheet" href="../src/styles/dashboard.css">
-  <link rel="stylesheet" href="../src/styles/inventario.css"> 
-  <link rel="preconnect" href="https://fonts.googleapis.com"> 
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+  <link rel="stylesheet" href="../src/styles/dashboard.css?v=20260208-ventas-fix">
+  <link rel="stylesheet" href="../src/styles/inventario.css?v=20260208-ventas-fix">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Barra superior -->
   <nav class="navbar">
     <div class="nav-brand">
-      <h2>🏪 Esquina del Ahorro</h2>
+      <h2>Esquina del Ahorro</h2>
     </div>
     <div class="nav-user">
       <span id="nombreUsuario">Usuario</span>
-      <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+      <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesion</button>
     </div>
   </nav>
 
-  <!-- Menú lateral -->
   <aside class="sidebar">
     <ul class="menu">
-      <li><a href="#" data-section="dashboard" class="active">📊 Dashboard</a></li>
-      <li><a href="#" data-section="pos">🛒 Punto de Venta</a></li>
-      <li><a href="#" data-section="productos">📦 Productos</a></li>
-      <li><a href="" data-section="ventas">💰 Ventas</a></li>
-      <li><a href="#" data-section="inventario">📋 Inventario</a></li>
+      <li><a href="#" data-section="dashboard" class="active">Dashboard</a></li>
+      <li><a href="#" data-section="pos">Punto de Venta</a></li>
+      <li><a href="#" data-section="productos">Productos</a></li>
+      <li><a href="#" data-section="ventas">Ventas</a></li>
+      <li><a href="#" data-section="inventario">Inventario</a></li>
     </ul>
   </aside>
 
-  <!-- Contenido principal -->
   <main class="content">
-    <!-- Sección Dashboard -->
     <section id="dashboard" class="section active">
       <h2>Dashboard</h2>
       <div class="stats-grid">
@@ -58,45 +54,38 @@
       </div>
     </section>
 
-    <!-- Sección Punto de Venta (POS) -->
     <section id="pos" class="section">
       <div class="pos-container">
-        <!-- Panel izquierdo: Productos -->
         <div class="pos-productos">
           <div class="pos-header">
-            <h2>🛒 Punto de Venta</h2>
-            <input 
-              type="text" 
-              id="buscarProducto" 
-              placeholder="🔍 Buscar producto (F2)..."
+            <h2>Punto de Venta</h2>
+            <input
+              type="text"
+              id="buscarProductoPos"
+              placeholder="Buscar producto (F2)..."
               class="search-input"
             >
           </div>
-          
-          <div id="productosGrid" class="productos-grid">
-            <!-- Productos se cargan dinámicamente -->
-          </div>
+
+          <div id="productosGrid" class="productos-grid"></div>
         </div>
 
-        <!-- Panel derecho: Carrito y Total -->
         <div class="pos-carrito">
           <div class="cliente-section">
             <label>Cliente:</label>
             <div class="cliente-row">
-              <input 
-                type="text" 
-                id="clienteInput" 
-                list="clientesList" 
-                class="form-control" 
+              <input
+                type="text"
+                id="clienteInput"
+                list="clientesList"
+                class="form-control"
                 placeholder="Buscar o seleccionar cliente..."
                 autocomplete="off"
               >
               <datalist id="clientesList">
                 <option value="">Cliente General</option>
               </datalist>
-              <button onclick="mostrarModalCliente()" class="btn-add-cliente" title="Agregar cliente">
-                ➕
-              </button>
+              <button onclick="mostrarModalCliente()" class="btn-add-cliente" title="Agregar cliente">+</button>
             </div>
           </div>
 
@@ -113,7 +102,7 @@
               </thead>
               <tbody id="carritoBody">
                 <tr>
-                  <td colspan="5" class="empty-cart">🛒 Carrito vacío</td>
+                  <td colspan="5" class="empty-cart">Carrito vacio</td>
                 </tr>
               </tbody>
             </table>
@@ -135,12 +124,12 @@
           </div>
 
           <div class="pago-section">
-            <label>Método de Pago:</label>
+            <label>Metodo de pago:</label>
             <select id="metodoPago" class="form-control">
-              <option value="efectivo">💵 Efectivo</option>
-              <option value="tarjeta">💳 Tarjeta</option>
-              <option value="transferencia">📱 Transferencia</option>
-              <option value="credito">📋 Crédito</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="tarjeta">Tarjeta</option>
+              <option value="transferencia">Transferencia</option>
+              <option value="credito">Credito</option>
             </select>
 
             <label>Notas:</label>
@@ -148,30 +137,24 @@
           </div>
 
           <div class="botones-accion">
-            <button onclick="cancelarVenta()" class="btn-cancelar">
-              ❌ Cancelar
-            </button>
-            <button onclick="procesarVenta()" id="btnProcesarVenta" class="btn-procesar" disabled>
-              ✅ Procesar Venta
-            </button>
+            <button onclick="cancelarVenta()" class="btn-cancelar">Cancelar</button>
+            <button onclick="procesarVenta()" id="btnProcesarVenta" class="btn-procesar" disabled>Procesar Venta</button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Sección Productos -->
     <section id="productos" class="section">
-      <h2>Gestión de Productos</h2>
-      
+      <h2>Gestion de Productos</h2>
+
       <div class="productos-container">
-        <!-- Formulario -->
         <div class="form-card">
           <h3 id="formTitulo">Nuevo Producto</h3>
           <form id="productoForm">
             <input type="hidden" id="productoId">
-            
+
             <div class="form-group">
-              <label>Código</label>
+              <label>Codigo</label>
               <input type="text" id="codigo" placeholder="P001" required>
             </div>
 
@@ -181,13 +164,13 @@
             </div>
 
             <div class="form-group">
-              <label>Descripción</label>
-              <textarea id="descripcion" placeholder="Descripción del producto"></textarea>
+              <label>Descripcion</label>
+              <textarea id="descripcion" placeholder="Descripcion del producto"></textarea>
             </div>
 
             <div class="form-row">
               <div class="form-group">
-                <label>Categoría</label>
+                <label>Categoria</label>
                 <select id="categoria_id" required>
                   <option value="">Seleccionar</option>
                 </select>
@@ -220,7 +203,7 @@
               </div>
 
               <div class="form-group">
-                <label>Stock Mínimo</label>
+                <label>Stock Minimo</label>
                 <input type="number" id="stock_minimo" min="0" placeholder="10" required>
               </div>
             </div>
@@ -243,20 +226,19 @@
           </form>
         </div>
 
-        <!-- Lista de productos -->
         <div class="table-card">
           <div class="table-header">
             <h3>Lista de Productos</h3>
-            <input type="text" id="buscarProducto" placeholder="🔍 Buscar producto..." class="search-input">
+            <input type="text" id="buscarProductoGestion" placeholder="Buscar producto..." class="search-input">
           </div>
 
           <div class="table-wrapper">
             <table>
               <thead>
                 <tr>
-                  <th>Código</th>
+                  <th>Codigo</th>
                   <th>Producto</th>
-                  <th>Categoría</th>
+                  <th>Categoria</th>
                   <th>Precio</th>
                   <th>Stock</th>
                   <th>Acciones</th>
@@ -269,22 +251,106 @@
       </div>
     </section>
 
-    <!-- Sección Ventas -->
     <section id="ventas" class="section">
-      <h2>Punto de Venta</h2>
-      <div class="ventas-container">
-        <div class="venta-form">
-          <h3>Nueva Venta</h3>
-          <p>Funcionalidad en desarrollo...</p>
+      <div class="ventas-panel">
+        <div class="ventas-header">
+          <div>
+            <h2>Ventas</h2>
+            <p class="ventas-subtitle">Historial y resumen generado desde Punto de Venta</p>
+          </div>
+          <div class="ventas-header-actions">
+            <button type="button" class="ventas-btn ventas-btn-primary btn btn-primary" onclick="window.ventasIrPos()">Ir a Punto de Venta</button>
+            <button type="button" class="ventas-btn ventas-btn-outline btn btn-outline" onclick="window.ventasActualizar()">Actualizar</button>
+            <button type="button" class="ventas-btn ventas-btn-outline btn btn-outline" onclick="window.ventasAbrirHistorial()">Ver historial completo</button>
+          </div>
+        </div>
+
+        <div class="ventas-stats-grid">
+          <article class="ventas-stat-card">
+            <h3 id="ventasTotalVentasHoy">0</h3>
+            <p>Ventas hoy</p>
+          </article>
+          <article class="ventas-stat-card">
+            <h3 id="ventasMontoTotalHoy">S/ 0.00</h3>
+            <p>Total recaudado hoy</p>
+          </article>
+          <article class="ventas-stat-card">
+            <h3 id="ventasTotalClientasHoy">0</h3>
+            <p>Clientas atendidas hoy</p>
+          </article>
+          <article class="ventas-stat-card">
+            <h3 id="ventasProductosVendidosHoy">0</h3>
+            <p>Productos vendidos hoy</p>
+          </article>
+        </div>
+
+        <div class="ventas-filters">
+          <div class="ventas-filters-row ventas-filters-row-4">
+            <input type="text" id="ventasBuscar" class="ventas-input" placeholder="Buscar por Nro venta o cliente...">
+            <select id="ventasFiltroMetodo" class="ventas-select">
+              <option value="">Todos los metodos</option>
+              <option value="efectivo">Efectivo</option>
+              <option value="tarjeta">Tarjeta</option>
+              <option value="transferencia">Transferencia</option>
+              <option value="credito">Credito</option>
+            </select>
+            <select id="ventasFiltroCliente" class="ventas-select">
+              <option value="">Todas las clientas</option>
+            </select>
+            <select id="ventasFiltroEstado" class="ventas-select">
+              <option value="">Todos los estados</option>
+              <option value="completada">Completada</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="anulada">Anulada</option>
+            </select>
+          </div>
+          <div class="ventas-filters-row ventas-filters-row-3">
+            <input type="date" id="ventasFechaInicio" class="ventas-input">
+            <input type="date" id="ventasFechaFin" class="ventas-input">
+            <button type="button" class="ventas-btn ventas-btn-outline btn btn-outline" onclick="window.ventasActualizar()">Aplicar filtros</button>
+          </div>
+        </div>
+
+        <div class="ventas-history">
+          <div class="ventas-history-header">
+            <h3>Ventas recientes</h3>
+          </div>
+          <div id="ventasRecientes" class="ventas-history-list">
+            <div class="loading">Cargando ventas...</div>
+          </div>
         </div>
       </div>
+
+      <div id="ventasModalHistorial" class="ventas-modal" aria-hidden="true">
+        <div class="ventas-modal-content ventas-modal-content-lg">
+          <div class="ventas-modal-header">
+            <h3>Historial completo de ventas</h3>
+            <button type="button" class="ventas-modal-close" onclick="window.ventasCerrarHistorial()">x</button>
+          </div>
+          <div class="ventas-modal-body">
+            <div class="ventas-table-wrapper">
+              <table class="ventas-table">
+                <thead>
+                  <tr>
+                    <th>Nro Venta</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Metodo</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody id="ventasTablaHistorial"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ventasToast" class="ventas-toast" role="status" aria-live="polite"></div>
     </section>
 
-    <!-- Inventario -->
-    <section id="inventario" class="section">
-      
-     
-    </section>
+    <section id="inventario" class="section"></section>
 
     <section id="reportes" class="section">
       <h2>Reportes</h2>
@@ -292,11 +358,63 @@
     </section>
 
     <section id="configuracion" class="section">
-      <h2>Configuración</h2>
+      <h2>Configuracion</h2>
       <p>Funcionalidad en desarrollo...</p>
     </section>
   </main>
 
-  <script type="module" src="../src/pages/dashboard.js"></script>
+  <script>
+    (function () {
+      const activarSeccion = function (sectionId) {
+        const links = document.querySelectorAll('.menu a[data-section]');
+        const sections = document.querySelectorAll('main.content > .section');
+
+        links.forEach(function (link) {
+          link.classList.toggle('active', link.dataset.section === sectionId);
+        });
+
+        sections.forEach(function (section) {
+          section.classList.toggle('active', section.id === sectionId);
+        });
+
+        window.location.hash = sectionId;
+      };
+
+      window.ventasIrPos = window.ventasIrPos || function () {
+        const link = document.querySelector('.menu a[data-section="pos"]');
+        if (link) {
+          link.click();
+          return;
+        }
+        activarSeccion('pos');
+      };
+
+      window.ventasAbrirHistorial = window.ventasAbrirHistorial || function () {
+        const modal = document.getElementById('ventasModalHistorial');
+        if (!modal) return;
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+      };
+
+      window.ventasCerrarHistorial = window.ventasCerrarHistorial || function () {
+        const modal = document.getElementById('ventasModalHistorial');
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+        modal.setAttribute('aria-hidden', 'true');
+      };
+
+      window.ventasActualizar = window.ventasActualizar || function () {
+        if (typeof window.__ventasActualizarImpl === 'function') {
+          window.__ventasActualizarImpl();
+          return;
+        }
+        window.dispatchEvent(new CustomEvent('ventas:refresh-request'));
+      };
+    })();
+  </script>
+  <script type="module" src="../src/pages/dashboard.js?v=20260208-ventas-fix"></script>
 </body>
 </html>
+

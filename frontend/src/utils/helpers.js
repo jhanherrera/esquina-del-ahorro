@@ -1,5 +1,63 @@
-// Configuración global
-const API_URL = "http://localhost:3000/api";
+﻿// Configuracion global de API con fallback de puertos.
+const construirBasesApi = () => {
+  const bases = [];
+
+  const agregar = (url) => {
+    if (!url) return;
+    const normalizada = String(url).replace(/\/+$/, '');
+    if (normalizada && !bases.includes(normalizada)) {
+      bases.push(normalizada);
+    }
+  };
+
+  if (typeof window !== 'undefined') {
+    const baseGuardada = localStorage.getItem('api_url');
+    agregar(baseGuardada);
+
+    const host = window.location.hostname || 'localhost';
+    agregar(`http://${host}:3000/api`);
+    agregar(`http://${host}:3001/api`);
+    agregar('http://localhost:3000/api');
+    agregar('http://localhost:3001/api');
+  } else {
+    agregar('http://localhost:3000/api');
+    agregar('http://localhost:3001/api');
+  }
+
+  return bases;
+};
+
+const API_BASES = construirBasesApi();
+let apiBaseActiva = API_BASES[0] || 'http://localhost:3000/api';
+
+const requestJSON = async (endpoint, options = {}) => {
+  let ultimoError = null;
+
+  const candidatas = [apiBaseActiva, ...API_BASES.filter((b) => b !== apiBaseActiva)];
+
+  for (const base of candidatas) {
+    try {
+      const response = await fetch(`${base}${endpoint}`, options);
+      const data = await response.json().catch(() => ({}));
+
+      apiBaseActiva = base;
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('api_url', base);
+      }
+
+      if (!response.ok && typeof data === 'object' && data !== null && !('success' in data)) {
+        data.success = false;
+        data.status = response.status;
+      }
+
+      return data;
+    } catch (error) {
+      ultimoError = error;
+    }
+  }
+
+  throw ultimoError || new Error('No se pudo conectar con la API');
+};
 
 // Utilidades para localStorage
 export const storage = {
@@ -15,33 +73,29 @@ export const storage = {
 // Utilidades para fetch
 export const api = {
   get: async (endpoint) => {
-    const response = await fetch(`${API_URL}${endpoint}`);
-    return response.json();
+    return requestJSON(endpoint, { method: 'GET' });
   },
 
   post: async (endpoint, data) => {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    return requestJSON(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    return response.json();
   },
 
   put: async (endpoint, data) => {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
+    return requestJSON(endpoint, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-    return response.json();
   },
 
   delete: async (endpoint) => {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      method: "DELETE"
+    return requestJSON(endpoint, {
+      method: 'DELETE'
     });
-    return response.json();
   }
 };
 
@@ -66,7 +120,7 @@ export const verificarAutenticacion = () => {
   return usuario;
 };
 
-// Cerrar sesión
+// Cerrar sesion
 export const cerrarSesion = () => {
   storage.clear();
   window.location.href = 'login.html';
@@ -74,5 +128,5 @@ export const cerrarSesion = () => {
 
 // Mostrar alertas
 export const mostrarAlerta = (mensaje, tipo = 'info') => {
-  alert(mensaje); // Puedes mejorar esto con SweetAlert2 o similar
+  alert(mensaje);
 };

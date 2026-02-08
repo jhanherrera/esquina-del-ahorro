@@ -5,13 +5,16 @@ import { formatearMoneda, storage } from '../utils/helpers.js';
 
 let productosDisponibles = [];
 let carrito = [];
-let clienteSeleccionado = null;
+let eventosConfigurados = false;
 
 // Inicializar POS
 export const inicializarPOS = async () => {
   await cargarProductos();
   await cargarClientes();
-  configurarEventos();
+  if (!eventosConfigurados) {
+    configurarEventos();
+    eventosConfigurados = true;
+  }
   actualizarCarrito();
 };
 
@@ -50,7 +53,7 @@ const mostrarProductos = (productos) => {
   }
 
   grid.innerHTML = productos.map(producto => `
-    <div class="producto-card" onclick="window.agregarAlCarrito(${producto.id})">
+    <div class="producto-card" onclick="window.agregarAlCarrito(${producto.id}, event)">
       <div class="producto-info">
         <h4>${producto.nombre}</h4>
         <p class="producto-codigo">${producto.codigo || 'S/C'}</p>
@@ -73,7 +76,7 @@ const buscarProductos = (termino) => {
 };
 
 // Agregar al carrito
-window.agregarAlCarrito = (productoId) => {
+window.agregarAlCarrito = (productoId, clickEvent) => {
   const producto = productosDisponibles.find(p => p.id === productoId);
   
   if (!producto) {
@@ -107,9 +110,13 @@ window.agregarAlCarrito = (productoId) => {
   actualizarCarrito();
   
   // Feedback visual
-  const btn = event.target.closest('.producto-card');
-  btn.style.transform = 'scale(0.95)';
-  setTimeout(() => btn.style.transform = 'scale(1)', 200);
+  const card = clickEvent?.target?.closest('.producto-card');
+  if (card) {
+    card.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      card.style.transform = 'scale(1)';
+    }, 200);
+  }
 };
 
 // Actualizar carrito
@@ -235,6 +242,7 @@ window.procesarVenta = async () => {
 
   if (resultado.success) {
     alert(`✅ Venta procesada exitosamente\nNúmero: ${resultado.numero_venta}\nTotal: ${formatearMoneda(resultado.total)}`);
+    window.dispatchEvent(new CustomEvent('venta:registrada', { detail: resultado }));
     
     // Limpiar carrito
     carrito = [];
@@ -300,7 +308,7 @@ window.cancelarVenta = () => {
 
 // Configurar eventos
 const configurarEventos = () => {
-  const buscarInput = document.getElementById('buscarProducto');
+  const buscarInput = document.getElementById('buscarProductoPos') || document.getElementById('buscarProducto');
   if (buscarInput) {
     buscarInput.addEventListener('input', (e) => {
       buscarProductos(e.target.value);

@@ -1,262 +1,61 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ventas - Esquina del Ahorro</title>
-    <link rel="stylesheet" href="../src/styles/ventas.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ventas - Esquina del Ahorro</title>
+  <meta http-equiv="refresh" content="0; url=dashboard.html#ventas">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: Inter, Arial, sans-serif;
+      background: #f8fafc;
+      color: #1f2937;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 24px;
+      width: min(520px, 92vw);
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+    }
+
+    p {
+      margin: 0 0 16px;
+      color: #4b5563;
+    }
+
+    a {
+      display: inline-block;
+      background: #2563eb;
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    a:hover {
+      background: #1d4ed8;
+    }
+  </style>
 </head>
 <body>
-
-<!-- Header -->
-<header class="header">
-    <div class="header-content">
-        <div class="header-left">
-            <h1>🛒 Punto de Venta</h1>
-            <p class="header-subtitle">Registro y control de ventas</p>
-        </div>
-        <div class="header-right">
-            <button class="btn btn-secondary" onclick="verHistorial()">
-                📄 Historial
-            </button>
-            <button class="btn btn-primary" onclick="nuevaVenta()">
-                ➕ Nueva Venta
-            </button>
-            <button class="btn btn-outline" onclick="volverDashboard()">
-                ← Volver
-            </button>
-        </div>
-    </div>
-</header>
-
-<!-- Main Container -->
-<main class="main-container">
-
-    <!-- Estadísticas -->
-    <section class="stats-section">
-
-        <div class="stat-card stat-card-primary">
-            <div class="stat-icon">🧾</div>
-            <div class="stat-content">
-                <h3 id="totalVentas">0</h3>
-                <p>Ventas Hoy</p>
-            </div>
-        </div>
-
-        <div class="stat-card stat-card-success">
-            <div class="stat-icon">💰</div>
-            <div class="stat-content">
-                <h3 id="montoTotal">S/ 0.00</h3>
-                <p>Total Recaudado</p>
-            </div>
-        </div>
-
-        <div class="stat-card stat-card-info">
-            <div class="stat-icon">👥</div>
-            <div class="stat-content">
-                <h3 id="totalClientes">0</h3>
-                <p>Clientes Atendidos</p>
-            </div>
-        </div>
-
-        <div class="stat-card stat-card-warning">
-            <div class="stat-icon">📦</div>
-            <div class="stat-content">
-                <h3 id="productosVendidos">0</h3>
-                <p>Productos Vendidos</p>
-            </div>
-        </div>
-
-    </section>
-
-    <!-- Buscador -->
-    <section class="filters-section">
-
-        <div class="search-box">
-            <input 
-                type="text" 
-                id="buscarProducto" 
-                placeholder="🔍 Buscar producto por nombre o código..."
-                class="search-input"
-            >
-        </div>
-
-        <div class="filters-row">
-            <select id="metodoPago" class="filter-select">
-                <option value="">Método de Pago</option>
-                <option value="efectivo">Efectivo</option>
-                <option value="tarjeta">Tarjeta</option>
-                <option value="transferencia">Transferencia</option>
-            </select>
-
-            <button class="btn btn-outline" onclick="limpiarVenta()">
-                🔄 Limpiar Venta
-            </button>
-        </div>
-
-    </section>
-
-    <!-- Zona de Venta -->
-    <section class="sale-section">
-
-        <!-- Productos -->
-        <div class="products-panel">
-
-            <div class="panel-header">
-                <h2>Productos Disponibles</h2>
-            </div>
-
-            <div class="table-container">
-                <table class="sales-table">
-                    <thead>
-                        <tr>
-                            <th>Código</th>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Stock</th>
-                            <th>Agregar</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablaProductos">
-                        <tr>
-                            <td colspan="5" class="text-center">
-                                <div class="loading">Cargando productos...</div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-
-        <!-- Carrito -->
-        <div class="cart-panel">
-
-            <div class="panel-header">
-                <h2>Venta Actual</h2>
-            </div>
-
-            <div id="listaCarrito" class="cart-list">
-                <p class="empty-cart">No hay productos agregados</p>
-            </div>
-
-            <div class="cart-summary">
-
-                <div class="summary-row">
-                    <span>Subtotal</span>
-                    <span id="subtotal">S/ 0.00</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>IGV (18%)</span>
-                    <span id="igv">S/ 0.00</span>
-                </div>
-
-                <div class="summary-row total">
-                    <span>Total</span>
-                    <span id="total">S/ 0.00</span>
-                </div>
-
-            </div>
-
-            <div class="cart-actions">
-                <button class="btn btn-outline" onclick="cancelarVenta()">
-                    ❌ Cancelar
-                </button>
-
-                <button class="btn btn-primary" onclick="procesarVenta()">
-                    ✅ Cobrar
-                </button>
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- Historial Reciente -->
-    <section class="history-section">
-
-        <div class="history-header">
-            <h2>Ventas Recientes</h2>
-            <button class="btn btn-outline btn-sm" onclick="verHistorial()">
-                Ver Todas
-            </button>
-        </div>
-
-        <div class="movements-container" id="ventasRecientes">
-            <div class="loading">Cargando ventas...</div>
-        </div>
-
-    </section>
-
-</main>
-
-<!-- Modal Pago -->
-<div id="modalPago" class="modal">
-
-    <div class="modal-content">
-
-        <div class="modal-header">
-            <h2>💳 Procesar Pago</h2>
-            <button class="modal-close" onclick="cerrarModalPago()">×</button>
-        </div>
-
-        <form id="formPago" class="modal-body">
-
-            <div class="form-group">
-                <label>Método de Pago</label>
-                <select id="pagoMetodo" class="form-control" required>
-                    <option value="efectivo">Efectivo</option>
-                    <option value="tarjeta">Tarjeta</option>
-                    <option value="transferencia">Transferencia</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Monto Recibido</label>
-                <input 
-                    type="number" 
-                    id="montoRecibido" 
-                    class="form-control" 
-                    placeholder="Ingrese monto"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Cambio</label>
-                <input 
-                    type="text" 
-                    id="cambio" 
-                    class="form-control" 
-                    readonly
-                >
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline" onclick="cerrarModalPago()">
-                    Cancelar
-                </button>
-
-                <button type="submit" class="btn btn-primary">
-                    💾 Confirmar Pago
-                </button>
-            </div>
-
-        </form>
-
-    </div>
-
-</div>
-
-<!-- Toast -->
-<div id="toast" class="toast"></div>
-
-<!-- Scripts -->
-<script type="module" src="../src/pages/ventas.js"></script>
-
+  <main class="card">
+    <h1>Modulo de ventas integrado</h1>
+    <p>Te estamos redirigiendo al dashboard en la seccion de ventas.</p>
+    <a href="dashboard.html#ventas">Ir ahora</a>
+  </main>
 </body>
 </html>
